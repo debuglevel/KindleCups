@@ -35,9 +35,10 @@ class Config:
         def __init__(self, config):
             self.ps2pdf = config.get("Tools", "ps2pdf")
     
-    def __init__(self):
+    def __init__(self, user):
+        userDirectory = "~"+user;
         self._config = ConfigParser.RawConfigParser()
-        self._config.read(os.path.expanduser("~marc/etc/KindleCups.conf"))
+        self._config.read(os.path.expanduser(userDirectory+"/etc/KindleCups.conf"))
         self.SMTP = Config.SMTP(self._config)
         self.Mail = Config.Mail(self._config)
         self.Tools = Config.Tools(self._config)
@@ -69,14 +70,15 @@ filename = sys.argv[6]
 
 
 # try to fetch the Environment Variable "DEVICE_URI"
-# TODO: does not seem to work 
-try:
-    deviceURI = os.environ["DEVICE_URI"]
-except KeyError:
-    deviceURI = ""
+# TODO: fetching environment variable does not seem to work 
+# CAVEAT: even if DeviceURI is configured as kindlecups://john.doe@free.kindle.com, CUPS sets DEVICE_URI=kindlecups://free.kindle.com
+#try:
+#    deviceURI = os.environ["DEVICE_URI"]
+#except KeyError:
+#    deviceURI = ""
     
 # initialize configuration
-config = Config()
+config = Config(user)
 
 # read the input from file or stdin
 if filename:
@@ -128,8 +130,7 @@ Copies: %s
 Options: %s
 Filename: %s
 inputType: %s
-deviceURI: %s
-""" % (str(datetime.datetime.now()), job, user, title, copies, options, filename, inputType, deviceURI)
+""" % (str(datetime.datetime.now()), job, user, title, copies, options, filename, inputType)
 
 msg.attach(MIMEText(text, "plain", "utf-8"))
 
