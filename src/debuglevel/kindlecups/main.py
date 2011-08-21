@@ -129,7 +129,7 @@ def createMailContainer(config):
     return msg
 
 # add mail text
-def addMailText(msg, user, filename, job, title, copies, options, inputType):
+def addMailText(msg, user, filename, job, title, copies, options, inputType, mimetype):
     text = """
 DateTime: %s
 Job: %s
@@ -139,7 +139,8 @@ Copies: %s
 Options: %s
 Filename: %s
 inputType: %s
-""" % (str(datetime.datetime.now()), job, user, title, copies, options, filename, inputType)
+input-MimeType: %s
+""" % (str(datetime.datetime.now()), job, user, title, copies, options, filename, inputType, mimetype)
     msg.attach(MIMEText(text, "plain", "utf-8"))
 
 # add mail attachment
@@ -190,7 +191,7 @@ def main():
     msg = createMailContainer(config)
     
     # add text to mail
-    addMailText(msg, user, filename, job, title, copies, options, inputType)
+    addMailText(msg, user, filename, job, title, copies, options, inputType, mimetype)
     
     # add attachment to mail
     addMailAttachment(msg, title, filedata, fileextension)
