@@ -14,6 +14,7 @@ network kindlecups:/noFurtherArguments "Unknown" "KindleCups"
 7a. if this printer does not show up, you might have to restart CUPS ("rccups restart", "restart cups", "/etc/init.d/cups restart" or something)
 8. enter some nice captions
 9. select the "Raw" vendor and the model "raw queue"
+10. copy KindleCups.conf to ~/etc/ and customize it
 
 To use and test the backend, do the following steps:
 ====================================================
