@@ -1,0 +1,31 @@
+To install this backend, do the following steps:
+================================================
+1. copy "main.py" to "/usr/lib/cups/backend" (be root)
+2. rename /usr/lib/cups/backend/main.py to /usr/lib/cups/backend/kindlecups (be root)
+3. make sure /usr/lib/cups/backend/kindlecups belongs to root and is executable
+4. open a terminal, run "./kindlecups" and make sure you get something like the following output:
+
+network kindlecups:/noFurtherArguments "Unknown" "KindleCups"
+
+4a. of it does not work, you might have to install python or fix the first line of the script
+5. open http://localhost:631 in your favorite browser
+6. add a new printer
+7. select "KindleCups (Unknown)"
+7a. if this printer does not show up, you might have to restart CUPS ("rccups restart", "restart cups", "/etc/init.d/cups restart" or something)
+8. enter some nice captions
+9. select the "Raw" vendor and the model "raw queue"
+
+To use and test the backend, do the following steps:
+====================================================
+1. open firefox (never tested on any other browser)
+2. browse to some random wikipedia article
+3. print the page to the printer you created
+4. I hope you got a copy from the mail the backend sent to amazon, a success-mail from amazon, and finally the document on your kindle
+4a. if not and the script failed, you might get some information in /var/log/cups/ 
+
+Caveats, Bugs, Todos, Hints:
+============================
+- some software (like OpenOffice.org/LibreOffice) or toolchains might give you creepy output which cannot be converted by amazon
+- currently, postscript conversion is not implemented
+- you might want to select a rather big papersize (reduces strange effects like word wrapping)
+- selecting other vendors than "raw" could produce useful things. (never tried.)
