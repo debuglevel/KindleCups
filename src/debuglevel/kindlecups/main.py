@@ -107,16 +107,16 @@ def getMimeType(filename):
     return mimetype
  
 # process input data (kind of dummy function for now)
-def processInput(mimetype):
+def processInput(filedata, mimetype, config):
     if "pdf" in mimetype:
         fileextension = ".pdf"
-    elif "postscript" in mimetype: # convert postscript to pdf
-        # TODO: untested and probably not working
-        p = subprocess.Popen(["$ps2pdf $tmpfilename /tmp/kindle-printer-$job.tmp.pdf"], shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        tmpfilename = "/tmp/kindle-printer-$job.tmp.pdf"
+    elif "postscript" in mimetype:
+        # convert postscript to pdf
+        p = subprocess.Popen([config.Tools.ps2pdf + " -sOutputFile=%stdout% -"], shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        filedata = p.communicate(input=filedata)
         fileextension = ".pdf"
-        print "I am in postscript convert mode. Untested ugly code"
-    return fileextension
+        
+    return filedata, fileextension
 
 # create mail container
 def createMailContainer(config):
@@ -185,7 +185,7 @@ def main():
     mimetype = getMimeType(filename)
     
     # process input data (kind of dummy function for now)
-    fileextension = processInput(mimetype)
+    filedata, fileextension = processInput(filedata, mimetype, config)
     
     # create mail container
     msg = createMailContainer(config)
