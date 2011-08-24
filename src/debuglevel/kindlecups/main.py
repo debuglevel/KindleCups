@@ -113,8 +113,13 @@ def processInput(filedata, mimetype, config):
     elif "postscript" in mimetype:
         # convert postscript to pdf
         p = subprocess.Popen([config.Tools.ps2pdf + " -sOutputFile=%stdout% -"], shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        filedata = p.communicate(input=filedata)
+        stdout, stderr = p.communicate(input=filedata)
+        filedata = stdout
         fileextension = ".pdf"
+        if p.returncode != 0:
+            print >> sys.stderr, 'An error occured during conversion from ps to pdf:'
+            print >> sys.stderr, stdout + '\n' + stderr
+            sys.exit(1)
         
     return filedata, fileextension
 
