@@ -148,12 +148,19 @@ input-MimeType: %s
 """ % (str(datetime.datetime.now()), job, user, title, copies, options, filename, inputType, mimetype)
     msg.attach(MIMEText(text, "plain", "utf-8"))
 
+def escapeAttachmentFilename(filename):
+    filename = str.replace(filename, '"', '\\"')
+    return filename
+
 # add mail attachment
 def addMailAttachment(msg, title, filedata, fileextension):
     part = MIMEBase('application', "octet-stream")
     part.set_payload(filedata)
     Encoders.encode_base64(part)
-    part.add_header('Content-Disposition', 'attachment; filename="%s%s"' % (title, fileextension))
+    #part.add_header('Content-Disposition', 'attachment; filename="%s%s"' % (title, fileextension))
+    filename = "%s%s" % (title, fileextension)
+    filename = escapeAttachmentFilename(filename)
+    part.add_header('Content-Disposition', 'attachment; filename="%s"' % filename)
     msg.attach(part)
 
 # send mail
